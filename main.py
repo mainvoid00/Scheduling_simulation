@@ -10,8 +10,6 @@ class scheduling() :
     wait_time=[]
     PID=[]
     
-    st
-    et
     
     
 def init():
@@ -33,4 +31,10 @@ def Priority_Nonpreemptive():
 
 
 def main():
+    print("helloworld")
     pass
+
+
+if __name__ == "__main__":
+    main()
+
