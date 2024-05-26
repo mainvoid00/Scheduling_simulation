@@ -10,6 +10,7 @@ class Scheduling() :
     arrival_time=[]
     PID=[]
     ready_queue=[]
+    DISPATCH=False
     def __init__(self, arrival_time, burst_time ,PID, priority):
         self.burst_time = (burst_time)
         self.arrival_time =(arrival_time)
@@ -36,9 +37,9 @@ def init(arrival_time, burst_time, PID, priority):
             
             PID.append(PID_INDEX)
             PID_INDEX+=1
-            burst_time.append(data[1])
-            arrival_time.append(data[0])
-            priority.append(data[2])
+            burst_time.append(int(data[1]))
+            arrival_time.append(int(data[0]))
+            priority.append(int(data[2]))
             
             
 def swap(arrival_time, burst_time, priority):
@@ -64,25 +65,49 @@ class FCFS(Scheduling):
      
     def __init__(self, arrival_time, burst_time, PID, priority):
         super().__init__(arrival_time, burst_time, PID, priority)
+        self.st = time.time()
+        self.pid_index = 0
+        self.ready_queue = []
+        
     print("-----FCFS START-----")
-   
+    
     
     
     def run(self):
-         st=time.time()
-         pid_index=0
-         while True:
         
-            now= time.time()
-            print((now - st))
-            if int(now) == arrival_time[pid_index] :
-                ready_queue.append(pid[pid_index])
-                print("PID",PID[pid_index],"enqueue")
-                pid_index+=1
+        while True:
+            now = time.time()
+            print("now time=",int(now - self.st))
+            if self.pid_index < len(self.arrival_time) and int(now - self.st) >= self.arrival_time[self.pid_index]:
+                self.ready_queue.append(self.PID[self.pid_index])
+                print("PID", self.PID[self.pid_index], "enqueue")
+                self.pid_index += 1
             
-            print("ready_queue = ", ready_queue)
+            print("ready_queue =", self.ready_queue)
+            
+            if self.DISPATCH == False and len(self.ready_queue):
+                self.DISPATCH= True
+                dispatch_pid= self.ready_queue[0]
+                dispatch_st = now
+                self.ready_queue.pop()
+                
+                
+                
+            if self.DISPATCH == True:
+                
+                print("running pid=", dispatch_pid, "burst time=", int(now-dispatch_st) )
+                if(int(self.burst_time[dispatch_pid]-int(now-dispatch_st)) == 0):
+                    print("time out PID",dispatch_pid)
+                    self.DISPATCH = False
+                
+                
+            if(len(self.ready_queue)== 0 and self.DISPATCH == False):
+                break
+            
             
             time.sleep(1)
+            
+
         
         
     
