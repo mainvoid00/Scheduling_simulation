@@ -1,5 +1,9 @@
 import time
 import queue
+from tabulate import tabulate
+
+
+
 #FCFS, SJF, 비선점 Priority, 선점 Priority, RR, SRT, HRN
 
 
@@ -11,18 +15,27 @@ class Scheduling() :
     PID=[]
     ready_queue=[]
     DISPATCH=False
-    time_table=[]
     def __init__(self, arrival_time, burst_time ,PID, priority):
         self.burst_time = (burst_time)
         self.arrival_time =(arrival_time)
         self.priority= (priority)
         self.PID = PID
-'''        
+  
     def Print(self):
-        print(self.PID[0], self.arrival_time[0], self.burst_time[0])
-        print(self.PID[1], self.arrival_time[1], self.burst_time[1])
-        print(self.PID[2], self.arrival_time[2], self.burst_time[2])
-'''
+        print("-----Process Information-----")
+
+        headers = ['PID', 'Arrival time', 'Burst time', 'Priority']
+
+        data = [[0 for _ in range(4)] for _ in range(len(self.PID))]
+
+
+        for i in range(len(self.PID)):
+            data [i][0] = self.PID[i]
+            data [i][1] = self.arrival_time[i]
+            data [i][2] = self.burst_time[i]
+            data [i][3] = self.priority[i]
+
+        print(tabulate(data, headers, tablefmt='fancy_grid'))
 
 def init(arrival_time, burst_time, PID, priority):
     
@@ -43,6 +56,7 @@ def init(arrival_time, burst_time, PID, priority):
             priority.append(int(data[2]))
             
             
+''' Process information SORT'''
 def swap(arrival_time, burst_time, priority):
     for i in range(len(arrival_time)-1):
         for j in range(i+1, len(arrival_time)):
@@ -70,11 +84,13 @@ class FCFS(Scheduling):
         self.pid_index = 0
         self.ready_queue = []
         
-    print("-----FCFS START-----")
+    
     
     
     
     def run(self):
+
+        print("-----FCFS START-----")
         
         while True:
             now = time.time()
@@ -86,11 +102,12 @@ class FCFS(Scheduling):
             
             print("ready_queue =", self.ready_queue)
             
-            if self.DISPATCH == False and len(self.ready_queue):
+            if self.DISPATCH == False and len(self.ready_queue) >0:
                 self.DISPATCH= True
-                dispatch_pid= self.ready_queue[0]
+                dispatch_pid= self.ready_queue.pop(0)
                 dispatch_st = now
-                self.ready_queue.pop()
+
+                
                 
                 
                 
@@ -100,6 +117,12 @@ class FCFS(Scheduling):
                 if(int(self.burst_time[dispatch_pid]-int(now-dispatch_st)) == 0):
                     print("time out PID",dispatch_pid)
                     self.DISPATCH = False
+                    if len(self.ready_queue) > 0:
+                        self.DISPATCH= True
+                        dispatch_pid= self.ready_queue.pop(0)
+                        dispatch_st = now  
+
+                    
                 
                 
             if(len(self.ready_queue)== 0 and self.DISPATCH == False):
@@ -130,8 +153,13 @@ def main():
     
     
     scheduling_fcfs = FCFS(arrival_time, burst_time, PID, priority)
-    #scheduling_fcfs.Print()
+    scheduling_fcfs.Print()
     scheduling_fcfs.run()
+    
+
+
+
+
     
     
     
