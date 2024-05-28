@@ -11,6 +11,7 @@ class Scheduling() :
     PID=[]
     ready_queue=[]
     DISPATCH=False
+    time_table=[]
     def __init__(self, arrival_time, burst_time ,PID, priority):
         self.burst_time = (burst_time)
         self.arrival_time =(arrival_time)
@@ -103,6 +104,8 @@ class FCFS(Scheduling):
                 
             if(len(self.ready_queue)== 0 and self.DISPATCH == False):
                 break
+            
+            
             
             
             time.sleep(1)
