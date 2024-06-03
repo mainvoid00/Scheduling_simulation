@@ -330,8 +330,100 @@ class Priroty(Scheduling):
         print("------------------------------")
     
 
-        
-        
+class RoundRobin(Scheduling):
+    def __init__(self, arrival_time, burst_time, PID, priority, time_quantum):
+        super().__init__(arrival_time, burst_time, PID, priority)
+        self.time_quantum = time_quantum
+        self.remaining_burst_time = burst_time[:]  # 남은 실행 시간을 저장
+        self.finish_time = [0] * len(self.process)  # 완료 시간을 저장
+
+    def Run(self):
+        print("----------Round Robin START----------")
+        flag = True
+        run_time = 0
+        pid_count = 0
+        time_slice = 0
+        current_pid = None
+
+        while flag:
+            # Ready queue Enqueue
+            if pid_count < len(self.process) and self.process[pid_count].arrival_time == run_time:
+                self.ready_queue.append(self.process[pid_count].PID)
+                self.process[pid_count].wait_start_time.append(run_time)
+                print("------------------------------")
+                print("PID", self.process[pid_count].PID, "enqueue now time =", run_time)
+                print("ready_queue =", self.ready_queue)
+                print("------------------------------")
+                pid_count += 1
+
+            # Dispatch
+            if not self.DISPATCH and self.ready_queue:
+                current_pid = self.ready_queue.pop(0)
+                self.process[current_pid].wait_end_time.append(run_time)
+                self.process[current_pid].burst_start_time.append(run_time)
+                time_slice = 0
+                self.DISPATCH = True
+                dispatch_start_time = run_time
+                print("------------------------------")
+                print("dispatch = PID", current_pid, "now time = ", run_time)
+                print("------------------------------")
+
+            # Process execution
+            if self.DISPATCH:
+                self.remaining_burst_time[current_pid] -= 1
+                time_slice += 1
+                run_time += 1
+
+                if self.remaining_burst_time[current_pid] == 0:
+                    print("------------------------------")
+                    print("time out PID", current_pid, "now time = ", run_time)
+                    print("------------------------------")
+                    self.process[current_pid].burst_end_time.append(run_time)
+                    self.process[current_pid].turn_around_time = run_time - self.process[current_pid].arrival_time
+                    self.DISPATCH = False
+                    current_pid = None
+
+                elif time_slice == self.time_quantum:
+                    print("------------------------------")
+                    print("time slice end PID", current_pid, "now time = ", run_time)
+                    print("------------------------------")
+                    self.ready_queue.append(current_pid)
+                    self.process[current_pid].wait_start_time.append(run_time)
+                    self.DISPATCH = False
+                    current_pid = None
+
+            # Idle time increment
+            else:
+                run_time += 1
+
+            # Run End
+            if len(self.ready_queue) == 0 and not self.DISPATCH and pid_count >= len(self.process):
+                flag = False
+
+    def Result(self):
+        AWT = 0
+        ATT = 0
+        for i in range(len(self.process)):
+            wait_time = 0
+            for j in range(len(self.process[i].wait_start_time)):
+                if j < len(self.process[i].wait_end_time):
+                    wait_time += self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j]
+            # 대기 시간에서 실제 실행 시간을 빼줍니다.
+            self.process[i].wait_time = wait_time - self.process[i].burst_time
+            AWT += self.process[i].wait_time
+            ATT += self.process[i].turn_around_time
+        print("------------RESULT------------")
+        print("Round Robin AWT = ", AWT / len(self.process))
+        print("Round Robin ATT = ", ATT / len(self.process))
+        print("------------------------------")
+
+
+
+
+
+
+
+
 
 def main():
     burst_time = []
@@ -340,19 +432,50 @@ def main():
     priority = []
     init(arrival_time, burst_time, PID, priority)
     swap(arrival_time, burst_time, priority)
-    scheduling_fcfs = FCFS(arrival_time, burst_time, PID, priority)
-    scheduling_fcfs.Print()
-    scheduling_fcfs.Run()
-    scheduling_fcfs.Result()
     
-    scheduling_sjf = SJF(arrival_time, burst_time, PID, priority)
-    scheduling_sjf.Run()
-    scheduling_sjf.Result()
+    while True:
+        print("-----scheduling simulation-----")
+        print("1. process information")
+        print("2. FCFS ")
+        print("3. priority")
+        print("4. roundRobin")
+        n= input()
+        if n =='1':
+            sch =Scheduling(arrival_time, burst_time, PID, priority)
+            sch.Print()
+        elif n =='2':
+            scheduling_fcfs = FCFS(arrival_time, burst_time, PID, priority)
+            scheduling_fcfs.Run()
+            scheduling_fcfs.Result()
+        
+        elif n=='3':
+            scheduling_sjf = SJF(arrival_time, burst_time, PID, priority)
+            scheduling_sjf.Run()
+            scheduling_sjf.Result()
+            
+        elif n =='4':
+            scheduling_sjf = SJF(arrival_time, burst_time, PID, priority)
+            scheduling_sjf.Run()
+            scheduling_sjf.Result()
+            
+        elif n =='5':
+            break
+        
+    
+    
+  
+    
+    
+   
     
     scheduling_pri = Priroty(arrival_time, burst_time, PID, priority)
     scheduling_pri.Run()
     scheduling_pri.Result()
     
+    time_quantum = 10  # 원하는 time quantum 값을 설정
+    scheduling_rr = RoundRobin(arrival_time, burst_time, PID, priority, time_quantum)
+    scheduling_rr.Run()
+    scheduling_rr.Result()
     
 if __name__ == "__main__":
     main()
