@@ -46,7 +46,7 @@ class RoundRobin(Scheduling):
                     print("time out PID", dispatch_pid, "now time = ",run_time)
                     print("------------------------------")
                     self.process[dispatch_pid].burst_end_time.append(run_time)
-                    self.process[dispatch_pid].turn_around_time = run_time - self.process[dispatch_pid].arrival_time
+                    
                     self.remaining_burst_time[dispatch_pid] -=(run_time - dispatch_start_time)
                     if(self.remaining_burst_time[dispatch_pid] >0):
                         self.ready_queue.append(dispatch_pid)
@@ -54,6 +54,10 @@ class RoundRobin(Scheduling):
                         print("------------------------------")
                         print("dispatch = PID", dispatch_pid, "now time = ", run_time)
                         print("------------------------------")
+                        
+                    else:
+                        self.process[dispatch_pid].turn_around_time = run_time - self.process[dispatch_pid].arrival_time
+                        
                     self.DISPATCH = False
                     
                     
@@ -85,10 +89,10 @@ class RoundRobin(Scheduling):
         for i in range(len(self.process)):
             wait_time = 0
             for j in range(len(self.process[i].wait_start_time)):
+                
                 if j < len(self.process[i].wait_end_time):
-                    wait_time += self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j]
-            # 대기 시간에서 실제 실행 시간을 빼줍니다.
-            self.process[i].wait_time = wait_time - self.process[i].burst_time
+                    self.process[i].wait_time += (self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j])
+
             AWT += self.process[i].wait_time
             ATT += self.process[i].turn_around_time
         print("------------RESULT------------")
