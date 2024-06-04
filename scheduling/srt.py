@@ -2,7 +2,7 @@ from .scheduling import Scheduling
 
 
 
-class RoundRobin(Scheduling):
+class SRT(Scheduling):
     def __init__(self, arrival_time, burst_time, PID, priority, time_quantum):
         super().__init__(arrival_time, burst_time, PID, priority)
         self.time_quantum = time_quantum
@@ -19,10 +19,29 @@ class RoundRobin(Scheduling):
             
             # Ready queue Enqueue
             if pid_count < len(self.process) and self.process[pid_count].arrival_time == run_time:
-                self.ready_queue.append(self.process[pid_count].PID)
-                self.process[pid_count].wait_start_time.append(run_time)
+                inserted = False
                 print("------------------------------")
                 print("PID", self.process[pid_count].PID, "enqueue now time =", run_time)
+                
+                if(len(self.ready_queue) == 0):
+                    self.ready_queue.append(self.process[pid_count].PID)
+                    self.process[pid_count].wait_start_time.append(run_time)
+                
+                else :
+                    for i in range(len(self.ready_queue)):
+                        if self.remaining_burst_time[i] > self.remaining_burst_time[pid_count]:
+                            self.ready_queue.insert(i, self.process[pid_count].PID)
+                            self.process[pid_count].wait_start_time.append(run_time)
+                            inserted = True
+                            break
+
+                    
+                    if not inserted:
+                        self.ready_queue.append(self.process[pid_count].PID)
+                        self.process[pid_count].wait_start_time.append(run_time)
+                        
+
+
                 print("ready_queue =", self.ready_queue)
                 print("------------------------------")
                 pid_count += 1
@@ -49,12 +68,23 @@ class RoundRobin(Scheduling):
                     
                     self.remaining_burst_time[dispatch_pid] -=(run_time - dispatch_start_time)
                     if(self.remaining_burst_time[dispatch_pid] >0):
-                        self.ready_queue.append(dispatch_pid)
-                        self.process[dispatch_pid].wait_start_time.append(run_time)
-                        print("------------------------------")
-                        print("dispatch = PID", dispatch_pid, "now time = ", run_time)
-                        print("------------------------------")
+                        inserted= False
+                        if(len(self.ready_queue) == 0):
+                            self.ready_queue.append(self.process[dispatch_pid].PID)
+                            self.process[dispatch_pid].wait_start_time.append(run_time)
                         
+                        else :
+                            for i in range(len(self.ready_queue)):
+                                if self.remaining_burst_time[i] > self.remaining_burst_time[dispatch_pid]:
+                                    self.ready_queue.insert(i, self.process[dispatch_pid].PID)
+                                    self.process[dispatch_pid].wait_start_time.append(run_time)
+                                    inserted = True
+                                    break
+                                
+                        if not inserted:
+                            self.ready_queue.append(self.process[dispatch_pid].PID)
+                            self.process[dispatch_pid].wait_start_time.append(run_time)
+
                     else:
                         self.process[dispatch_pid].turn_around_time = run_time - self.process[dispatch_pid].arrival_time
                         
@@ -89,12 +119,13 @@ class RoundRobin(Scheduling):
         for i in range(len(self.process)):
             wait_time = 0
             for j in range(len(self.process[i].wait_start_time)):
+                
                 if j < len(self.process[i].wait_end_time):
                     self.process[i].wait_time += (self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j])
 
             AWT += self.process[i].wait_time
             ATT += self.process[i].turn_around_time
         print("------------RESULT------------")
-        print("Round Robin AWT = ", AWT / len(self.process))
-        print("Round Robin ATT = ", ATT / len(self.process))
+        print("SRT AWT = ", AWT / len(self.process))
+        print("SRT ATT = ", ATT / len(self.process))
         print("------------------------------")

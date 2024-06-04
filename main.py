@@ -4,10 +4,10 @@ from tabulate import tabulate
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from scheduling import Process, Scheduling, FCFS, SJF, Priority, RoundRobin
+from scheduling import Process, Scheduling, FCFS, SJF, Priority, RoundRobin, SRT
 
 def init(arrival_time, burst_time, PID, priority):
-    with open("./init.txt", 'r') as f:
+    with open("./input.txt", 'r') as f:
         PID_INDEX = 0
         while True:
             line = f.readline()
@@ -45,6 +45,12 @@ def main():
         print("2. FCFS ")
         print("3. priority(non_preemptive)")
         print("4. SJF")
+        print("5. Round Robin")
+        print("6. SRT")
+        print("7. priority (preemptive)")
+        print("8. HRN")
+        print("9. EXIT")
+        
         n= input()
         if n =='1':
             sch =Scheduling(arrival_time, burst_time, PID, priority)
@@ -70,8 +76,21 @@ def main():
             scheduling_rr.Run()
             scheduling_rr.Result()
         elif n =='6':
+            time_quantum = 10  # 원하는 time quantum 값을 설정
+            scheduling_srt = SRT(arrival_time, burst_time, PID, priority, time_quantum)
+            scheduling_srt.Run()
+            scheduling_srt.Result()
+        elif n == '7':
+            #priority preemptive scheduling
+            pass
+        
+        elif n == '8':
+            #HRN
+            pass
+        
+        elif n == '9':
+            #exit
             break
-
         else:
             print("wrong command try again")
         
