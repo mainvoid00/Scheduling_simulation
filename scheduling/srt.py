@@ -112,7 +112,7 @@ class SRT(Scheduling):
             run_time += 1
         
                     
-
+'''
     def Result(self):
         AWT = 0
         ATT = 0
@@ -129,3 +129,4 @@ class SRT(Scheduling):
         print("SRT AWT = ", AWT / len(self.process))
         print("SRT ATT = ", ATT / len(self.process))
         print("------------------------------")
+'''

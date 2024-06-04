@@ -81,7 +81,7 @@ class RoundRobin(Scheduling):
             run_time += 1
         
                     
-
+'''
     def Result(self):
         AWT = 0
         ATT = 0
@@ -97,3 +97,4 @@ class RoundRobin(Scheduling):
         print("Round Robin AWT = ", AWT / len(self.process))
         print("Round Robin ATT = ", ATT / len(self.process))
         print("------------------------------")
+'''

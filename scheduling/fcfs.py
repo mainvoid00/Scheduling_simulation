@@ -58,7 +58,7 @@ class FCFS(Scheduling):
                 flag = False
 
             run_time += 1
-
+'''
     def Result(self):
         AWT = 0
         ATT = 0
@@ -71,3 +71,4 @@ class FCFS(Scheduling):
         print("FCFS AWT = ", AWT / len(self.process))
         print("FCFS ATT = ", ATT / len(self.process))
         print("------------------------------")
+'''

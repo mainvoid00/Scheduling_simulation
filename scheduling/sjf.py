@@ -86,6 +86,7 @@ class SJF(Scheduling):
 
             run_time += 1
         
+'''
     # Result     
     def Result(self,):
         AWT = 0
@@ -99,3 +100,4 @@ class SJF(Scheduling):
         print("SJF AWT = ",AWT/len(self.process))
         print("SJF ATT = ",ATT/len(self.process))
         print("------------------------------")
+'''

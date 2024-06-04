@@ -121,7 +121,7 @@ class PriorityPreemptive(Scheduling):
                 flag = False
 
             run_time += 1
-        
+'''   
     # Result     
     def Result(self,):
         AWT = 0
@@ -135,3 +135,4 @@ class PriorityPreemptive(Scheduling):
         print("Priority AWT = ",AWT/len(self.process))
         print("Priority ATT = ",ATT/len(self.process))
         print("------------------------------")
+'''

@@ -6,3 +6,4 @@ from .priority import Priority
 from .round_robin import RoundRobin
 from .srt import SRT
 from .priority_preemptive import PriorityPreemptive
+from .hrn import HRN
