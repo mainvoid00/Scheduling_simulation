@@ -46,7 +46,6 @@ class RoundRobin(Scheduling):
                     print("time out PID", dispatch_pid, "now time = ",run_time)
                     print("------------------------------")
                     self.process[dispatch_pid].burst_end_time.append(run_time)
-                    
                     self.remaining_burst_time[dispatch_pid] -=(run_time - dispatch_start_time)
                     if(self.remaining_burst_time[dispatch_pid] >0):
                         self.ready_queue.append(dispatch_pid)

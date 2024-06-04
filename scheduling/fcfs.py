@@ -65,8 +65,8 @@ class FCFS(Scheduling):
         for i in range(len(self.process)):
             for j in range(len(self.process[i].wait_start_time)):
                 self.process[i].wait_time += self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j]
-                AWT += self.process[i].wait_time
-                ATT += self.process[i].turn_around_time
+            AWT += self.process[i].wait_time
+            ATT += self.process[i].turn_around_time
         print("------------RESULT------------")
         print("FCFS AWT = ", AWT / len(self.process))
         print("FCFS ATT = ", ATT / len(self.process))

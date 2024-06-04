@@ -4,7 +4,7 @@ from tabulate import tabulate
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from scheduling import Process, Scheduling, FCFS, SJF, Priority, RoundRobin, SRT
+from scheduling import Process, Scheduling, FCFS, SJF, Priority, RoundRobin, SRT, PriorityPreemptive
 
 def init(arrival_time, burst_time, PID, priority):
     with open("./input.txt", 'r') as f:
@@ -82,7 +82,9 @@ def main():
             scheduling_srt.Result()
         elif n == '7':
             #priority preemptive scheduling
-            pass
+            scheduling_priroty_preemptive = PriorityPreemptive(arrival_time, burst_time, PID, priority)
+            scheduling_priroty_preemptive.Run()
+            scheduling_priroty_preemptive.Result()
         
         elif n == '8':
             #HRN

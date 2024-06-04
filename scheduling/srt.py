@@ -81,9 +81,9 @@ class SRT(Scheduling):
                                     inserted = True
                                     break
                                 
-                        if not inserted:
-                            self.ready_queue.append(self.process[dispatch_pid].PID)
-                            self.process[dispatch_pid].wait_start_time.append(run_time)
+                            if not inserted:
+                                self.ready_queue.append(self.process[dispatch_pid].PID)
+                                self.process[dispatch_pid].wait_start_time.append(run_time)
 
                     else:
                         self.process[dispatch_pid].turn_around_time = run_time - self.process[dispatch_pid].arrival_time
