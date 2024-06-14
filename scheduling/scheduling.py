@@ -23,6 +23,40 @@ class Scheduling:
 
     
     def Result(self, sch_name):
+        
+        
+        total_wait_time = 0
+        total_turnaround_time = 0
+        total_response_time = 0
+
+        headers = ['PID', 'Wait Time', 'Turn Around Time', 'Response Time']
+        data = []
+
+        for i in range(len(self.process)):
+            for j in range(len(self.process[i].wait_start_time)):
+                self.process[i].wait_time += self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j]
+            total_wait_time += self.process[i].wait_time
+            total_turnaround_time += self.process[i].turn_around_time
+            
+            # Assume response time is the time from arrival to first CPU allocation
+            response_time = self.process[i].burst_start_time[0] - self.process[i].arrival_time
+            total_response_time += response_time
+
+            data.append([self.process[i].PID, self.process[i].wait_time, self.process[i].turn_around_time, response_time])
+
+        avg_wait_time = total_wait_time / len(self.process)
+        avg_turnaround_time = total_turnaround_time / len(self.process)
+        avg_response_time = total_response_time / len(self.process)
+
+        print("------------RESULT------------")
+        print(tabulate(data, headers, tablefmt='fancy_grid'))
+        print(f"{sch_name} AWT =", avg_wait_time)
+        print(f"{sch_name} ATT =", avg_turnaround_time)
+        print(f"{sch_name} ART =", avg_response_time)
+        print("------------------------------")
+        
+        
+        '''
         AWT = 0
         ATT = 0
         for i in range(len(self.process)):
@@ -35,6 +69,8 @@ class Scheduling:
         print(f"{sch_name} ATT = ", ATT / len(self.process))
         print("------------------------------")
 
+    
+        '''
     def draw_gantt_chart(self):
         fig, gnt = plt.subplots()
 

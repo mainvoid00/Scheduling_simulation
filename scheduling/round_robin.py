@@ -81,20 +81,3 @@ class RoundRobin(Scheduling):
             run_time += 1
         
                     
-'''
-    def Result(self):
-        AWT = 0
-        ATT = 0
-        for i in range(len(self.process)):
-            wait_time = 0
-            for j in range(len(self.process[i].wait_start_time)):
-                if j < len(self.process[i].wait_end_time):
-                    self.process[i].wait_time += (self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j])
-
-            AWT += self.process[i].wait_time
-            ATT += self.process[i].turn_around_time
-        print("------------RESULT------------")
-        print("Round Robin AWT = ", AWT / len(self.process))
-        print("Round Robin ATT = ", ATT / len(self.process))
-        print("------------------------------")
-'''

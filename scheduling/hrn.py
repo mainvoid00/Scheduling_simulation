@@ -82,18 +82,3 @@ class HRN(Scheduling):
 
             run_time += 1
 
-
-'''
-    def Result(self):
-        AWT = 0
-        ATT = 0
-        for i in range(len(self.process)):
-            for j in range(len(self.process[i].wait_start_time)):
-                self.process[i].wait_time += self.process[i].wait_end_time[j] - self.process[i].wait_start_time[j]
-            AWT += self.process[i].wait_time
-            ATT += self.process[i].turn_around_time
-        print("------------RESULT------------")
-        print("HRN AWT = ", AWT / len(self.process))
-        print("HRN ATT = ", ATT / len(self.process))
-        print("------------------------------")
-'''
